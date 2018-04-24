@@ -8,7 +8,7 @@ if (!$currentUser) {
     die;
 }
 
-if ($_GET['logout']) {
+if (!empty($_GET['logout'])) {
     require_once 'core/logout.php';
     die;
 }
@@ -42,7 +42,7 @@ if (file_exists($jsonPath)) {
           </p>
           <a class="logout" href="?logout=true">Выход</a>
         </div>
-      <span class="ver">ver. 1.0</span>
+      <span class="ver">ver. 1.0.1</span>
     </header>
     <div class="container">
         <h1>Парсер списка лекций</h1>

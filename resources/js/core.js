@@ -26,6 +26,8 @@ class ParsingState {
     progressElement.parentNode.classList.remove('hidden');
     info.classList.remove('hidden');
     progress = new Progress(progressElement);
+    success.innerText = '';
+    errors.innerText = '';
   }
 
   isNowParsing() {
@@ -107,15 +109,17 @@ class Timetable {
 
       if (dayTimetable.seminars.times.indexOf(time) === -1) {
         dayTimetable.seminars.times.push(time);
+        dayTimetable.seminars[time] = [];
       }
 
-      dayTimetable.seminars[time] =
+      dayTimetable.seminars[time].push(
         {
           time: time,
           courseCode: seminar.courseCode,
           name: seminar.name.replace(/Занятие [0-9]+.[0-9]+. /, ''),
           teacher: seminar.teacher.name
         }
+      );
     });
 
     return dayTimetable;
@@ -262,7 +266,7 @@ function sendRequest(url = '', responseHandler = (data) => data, method = 'POST'
  */
 function responseHandler(data) {
   const decodedData = JSON.parse(data);
-  console.log(decodedData);
+  //console.log(decodedData);
   const curGroup = document.createElement('div');
 
   if (decodedData) {
@@ -327,8 +331,9 @@ function showTimetable() {
 
       date.seminars.times.forEach(time => {
         // 17:00 ND-11 «Знакомство с терминами SPA, MVC и введение в Angular» - Гильязов
-        let seminar = date.seminars[time];
-        seminarsList += `${seminar.time} ${seminar.courseCode} «${seminar.name}» - ${seminar.teacher}\n`;
+        date.seminars[time].forEach(seminar => {
+          seminarsList += `${seminar.time} ${seminar.courseCode} «${seminar.name}» - ${seminar.teacher}\n`;
+        });
       });
     }
   });
