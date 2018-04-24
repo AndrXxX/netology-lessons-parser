@@ -1,0 +1,56 @@
+[
+  {
+    "name": "js",
+    "fullName": "Курс JavaScript: современныe возможности языка",
+    "startNumber": "15",
+    "groupsNumber": "7"
+  },
+  {
+    "name": "nd",
+    "fullName": "Node, AngularJS и MongoDB: разработка полноценных веб-приложений",
+    "startNumber": "10",
+    "groupsNumber": "7"
+  },
+  {
+    "name": "py",
+    "fullName": "Курс Python: программирование на каждый день и сверхбыстрое прототипирование",
+    "startNumber": "13",
+    "groupsNumber": "7"
+  },
+  {
+    "name": "ra",
+    "fullName": "Курс Библиотека React: построй свою любовь к интерактивным веб-интерфейсам",
+    "startNumber": "8",
+    "groupsNumber": "7"
+  },
+  {
+    "name": "hj",
+    "fullName": "Курс JavaScript в браузере: создаем интерактивные веб-страницы",
+    "startNumber": "19",
+    "groupsNumber": "7"
+  },
+  {
+    "name": "html",
+    "fullName": "Курс HTML-верстка: с нуля до первого макета",
+    "startNumber": "29",
+    "groupsNumber": "7"
+  },
+  {
+    "name": "mq",
+    "fullName": "Адаптивная и мобильная верстка",
+    "startNumber": "6",
+    "groupsNumber": "7"
+  },
+  {
+    "name": "php",
+    "fullName": "Курс PHP/SQL: back-end разработка и базы данных",
+    "startNumber": "21",
+    "groupsNumber": "7"
+  },
+  {
+    "name": "wm",
+    "fullName": "Основы HTML и CSS",
+    "startNumber": "30",
+    "groupsNumber": "7"
+  }
+]

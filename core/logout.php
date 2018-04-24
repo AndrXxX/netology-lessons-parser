@@ -1,0 +1,4 @@
+<?php
+
+logout();
+redirect('index');
