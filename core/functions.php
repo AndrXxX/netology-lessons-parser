@@ -19,11 +19,15 @@ function checkForLogin($login, $password, $captcha = null)
         increaseLoginAttempts();
         return false;
     }
-    if (!login($login, $password)) {
+
+    $result = login($login, $password);
+
+    if (!$result) {
         $_SESSION['loginErrors'][] = 'Неправильный логин или пароль';
         increaseLoginAttempts();
         return false;
     }
+    
     redirect('index');
     return true;
 }
@@ -45,11 +49,26 @@ function login($login, $password)
         ];
 
         $result = request_func('https://netology.ru/login/', $post);
+
+        /*Работает у экспертов*/
         preg_match('/<span class=\"user_title\">([^<\/span>]*)/', $result, $userName);
         preg_match('/<img src=\"([^"]*)/', $result, $userPic);
-        if (!empty(getCookieFromSession())) {
-            $_SESSION['user'] = $userName[1];
-            $_SESSION['pic'] = "https://netology.ru$userPic[1]";
+        $userName = $userName[1];
+        $userPic = (!empty($userPic[1])) ? "https://netology.ru$userPic[1]" : null;
+
+        if (empty($userName)) {
+            $result = request_func('https://netology.ru/loginform/', $post);
+
+            /*Работает у обычных студентов*/
+            preg_match('/(window.app_options =)(.+)(;window.server_time)/', $result, $studentInfo);
+            $studentDecodedInfo = json_decode($studentInfo[2], true) or null;
+            $userName = $studentDecodedInfo['user']['full_name'] or null;
+            $userPic = $studentDecodedInfo['user']['medium_avatar_url'] or null;
+        }
+
+        if (!empty(getCookieFromSession()) && !(empty($userName)) && !empty($userPic)) {
+            $_SESSION['user'] = $userName;
+            $_SESSION['pic'] = $userPic;
             return true;
         }
     }

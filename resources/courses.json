@@ -1,54 +1,54 @@
 [
   {
-    "name": "js",
+    "name": "JS",
     "fullName": "Курс JavaScript: современныe возможности языка",
     "startNumber": "15",
     "groupsNumber": "7"
   },
   {
-    "name": "nd",
+    "name": "ND",
     "fullName": "Node, AngularJS и MongoDB: разработка полноценных веб-приложений",
     "startNumber": "10",
     "groupsNumber": "7"
   },
   {
-    "name": "py",
+    "name": "PY",
     "fullName": "Курс Python: программирование на каждый день и сверхбыстрое прототипирование",
     "startNumber": "13",
     "groupsNumber": "7"
   },
   {
-    "name": "ra",
+    "name": "RA",
     "fullName": "Курс Библиотека React: построй свою любовь к интерактивным веб-интерфейсам",
     "startNumber": "8",
     "groupsNumber": "7"
   },
   {
-    "name": "hj",
+    "name": "HJ",
     "fullName": "Курс JavaScript в браузере: создаем интерактивные веб-страницы",
     "startNumber": "19",
     "groupsNumber": "7"
   },
   {
-    "name": "html",
+    "name": "HTML",
     "fullName": "Курс HTML-верстка: с нуля до первого макета",
     "startNumber": "29",
     "groupsNumber": "7"
   },
   {
-    "name": "mq",
+    "name": "MQ",
     "fullName": "Адаптивная и мобильная верстка",
     "startNumber": "6",
     "groupsNumber": "7"
   },
   {
-    "name": "php",
+    "name": "PHP",
     "fullName": "Курс PHP/SQL: back-end разработка и базы данных",
     "startNumber": "21",
     "groupsNumber": "7"
   },
   {
-    "name": "wm",
+    "name": "WM",
     "fullName": "Основы HTML и CSS",
     "startNumber": "30",
     "groupsNumber": "7"

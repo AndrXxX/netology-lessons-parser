@@ -17,7 +17,15 @@ header p {
 .greet {
   font-size: 24px;
   text-align: left;
-  padding-left: 10px;
+  padding-left: 50px;
+}
+
+.avatar {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  width: 40px;
+  border: 1px solid gray;
 }
 
 .logout {
@@ -50,13 +58,6 @@ header p {
   z-index: 100;
 }
 
-.header .ver {
-  position: absolute;
-  top: 0;
-  right: 5px;
-  font-size: 10px;
-}
-
 .hidden {
   display: none;
 }
@@ -76,6 +77,10 @@ header p {
 
 .info-output {
   width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: left;
+  border: 1px solid grey;
 }
 
 .buttons:not(.hidden),
@@ -85,6 +90,12 @@ header p {
   display: inline-block;
   vertical-align: top;
 }
+
+.btn:hover {
+  cursor: pointer;
+  color: blue;
+}
+
 .success {
   border: 2px solid green;
   background-color: lightgreen;
@@ -143,4 +154,19 @@ tr td:last-child {
 
 td input {
   width: 30px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  height: 30px;
+  width: 100%;
+  text-align: center;
+  background-color: lightgrey;
+}
+
+.footer .ver,
+.footer .copyright {
+  line-height: 30px;
+  font-size: 10px;
 }

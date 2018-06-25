@@ -37,12 +37,13 @@ if (file_exists($jsonPath)) {
 <body>
     <header class="header">
         <div class="container">
+          <img src="<?= $_SESSION['pic'] ?>" class="avatar">
           <p class="greet">
-            <img src="<?= $_SESSION['pic'] ?>" class="avatar " width="26"><?= $currentUser ?>
+            <?= $currentUser ?>
           </p>
           <a class="logout" href="?logout=true">Выход</a>
         </div>
-      <span class="ver">ver. 1.0.1</span>
+
     </header>
     <div class="container">
         <h1>Парсер списка лекций</h1>
@@ -87,7 +88,7 @@ if (file_exists($jsonPath)) {
         <div class="output">
           <div class="info hidden">
             <p>Расписание на ближайшие 7 дней:</p>
-            <textarea class="info-output" name="info" cols="30" rows="10"></textarea>
+            <div class="info-output"></div>
           </div>
 
             <div class="success hidden"></div>
@@ -97,6 +98,9 @@ if (file_exists($jsonPath)) {
       </div>
 
     </div>
+    <footer class="footer">
+      <span class="ver"></span><span class="copyright">, © <a href="https://github.com/AndrXxX">AndrXxX</a>, 2018</span>
+    </footer>
   <script src="resources/js/core.js"></script>
 </body>
 </html>

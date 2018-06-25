@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 /**
  * Класс для переключения состояния парсинга
@@ -16,6 +16,9 @@ class ParsingState {
     this.button.value = this.btnStartName;
     optionsBtn.classList.remove('hidden');
     progressElement.parentNode.classList.add('hidden');
+    if (progress.progress === 100) {
+      info.classList.remove('hidden');
+    }
   }
 
   startParsing() {
@@ -24,10 +27,11 @@ class ParsingState {
     showErrorsBtn.classList.remove('hidden');
     optionsBtn.classList.add('hidden');
     progressElement.parentNode.classList.remove('hidden');
-    info.classList.remove('hidden');
+    info.classList.add('hidden');
     progress = new Progress(progressElement);
     success.innerText = '';
     errors.innerText = '';
+    infoOutput.innerText = '';
   }
 
   isNowParsing() {
@@ -116,7 +120,7 @@ class Timetable {
         {
           time: time,
           courseCode: seminar.courseCode,
-          name: seminar.name.replace(/Занятие [0-9]+.[0-9]+. /, ''),
+          name: seminar.name.replace(/Занятие [0-9]+.[0-9]+. /, '').replace(/Занятие .[0-9]+. /, ''),
           teacher: seminar.teacher.name
         }
       );
@@ -155,9 +159,13 @@ class ExtDate extends Date {
   }
 }
 
+const version = 'ver. 1.0.2';
+document.querySelector('.ver').innerText = version;
+
 const main = document.querySelector('.main');
 const options = document.querySelector('.options');
 const info = document.querySelector('.info');
+const infoOutput = info.querySelector('.info-output');
 const success = document.querySelector('.success');
 const errors = document.querySelector('.errors');
 const startBtn = document.querySelector('.btn.btn-start');
@@ -215,6 +223,7 @@ function onStartBtnClick(event) {
   if (parsing.isNowParsing()) {
     parsing.stopParsing();
   } else {
+    timetable.clear();
     parsing.startParsing();
 
     for (let course of courses) {
@@ -223,12 +232,17 @@ function onStartBtnClick(event) {
       const groupsNum = Number.parseInt(course.dataset.groupsNum);
 
       for (let num = start; num < start + groupsNum; num++) {
-        progress.addElements(1);
-        const post = new FormData();
-        post.append('course', name);
-        post.append('group', num);
+        if (parsing.isNowParsing()) {
+          progress.addElements(1);
+          const post = new FormData();
+          post.append('course', name);
+          post.append('group', num);
 
-        sendRequest('start_pars.php', responseHandler, 'POST', post);
+          sendRequest('start_pars.php', responseHandler, 'POST', post);
+        }  else {
+          timetable.clear();
+          break;
+        }
       }
     }
 
@@ -267,25 +281,27 @@ function sendRequest(url = '', responseHandler = (data) => data, method = 'POST'
 function responseHandler(data) {
   const decodedData = JSON.parse(data);
   //console.log(decodedData);
-  const curGroup = document.createElement('div');
+  if (parsing.isNowParsing()) {
+    const curGroup = document.createElement('div');
 
-  if (decodedData) {
-    curGroup.innerText = `${decodedData.course}-${decodedData.group}`;
-    if (decodedData.success) {
-      curGroup.innerText += ' / успешно';
-      success.appendChild(curGroup);
-      courseParser(decodedData);
-    } else {
-      curGroup.innerText += ` / ${decodedData.errors[0].message}`;
-      errors.appendChild(curGroup);
+    if (decodedData) {
+      curGroup.innerText = `${decodedData.course}-${decodedData.group}`;
+      if (decodedData.success) {
+        curGroup.innerText += ' / успешно';
+        success.appendChild(curGroup);
+        courseParser(decodedData);
+      } else {
+        curGroup.innerText += ` / ${decodedData.errors[0].message}`;
+        errors.appendChild(curGroup);
+      }
     }
-  }
 
-  progress.addFinishedElements(1);
-  if (progress.progress === 100) { // если все выполнено
-    parsing.stopParsing();
+    progress.addFinishedElements(1);
+    if (progress.progress === 100) { // если все выполнено
+      parsing.stopParsing();
 
-    showTimetable();
+      showTimetable();
+    }
   }
 }
 
@@ -297,6 +313,7 @@ function courseParser(course) {
   course.data.blocks.forEach(courseBlock => {
     courseBlock.seminars.forEach(seminar => {
       const today = new ExtDate();
+      today.setDate(today.getDate() - 1);
       today.setMinutes(0);
       today.setHours(0);
 
@@ -314,29 +331,41 @@ function courseParser(course) {
 function showTimetable() {
   const today = new ExtDate();
   const endPeriod = new ExtDate(today.getTime());
+  today.setDate(today.getDate() - 1);
   today.setMinutes(0);
   today.setHours(0);
   endPeriod.setDate(endPeriod.getDate() + 7);
   endPeriod.setMinutes(59);
   endPeriod.setHours(23);
 
-  const output = info.querySelector('.info-output');
   let seminarsList = '';
+  let list = document.createDocumentFragment();
 
   timetable.showAll().forEach(date => {
-    if (date.date > today && date.date < endPeriod) {
-      seminarsList += `\n${date.date.getRuDayMonth()}:\n`;
+    if (date.date >= today && date.date <= endPeriod) {
+      //seminarsList += `\n${date.date.getRuDayMonth()}:\n`;
+      let title = document.createElement('h2');
+      title.innerText = `${date.date.getRuDayMonth()}:`;
+      list.appendChild(title);
+
+      let seminarsList = document.createElement('ul');
+      list.appendChild(seminarsList);
 
       date.seminars.times.sort();
 
       date.seminars.times.forEach(time => {
         // 17:00 ND-11 «Знакомство с терминами SPA, MVC и введение в Angular» - Гильязов
         date.seminars[time].forEach(seminar => {
-          seminarsList += `${seminar.time} ${seminar.courseCode} «${seminar.name}» - ${seminar.teacher}\n`;
+          let seminarEl = document.createElement('li');
+          seminarEl.innerText = `${seminar.time} ${seminar.courseCode} «${seminar.name}» - ${seminar.teacher}`;
+
+          seminarsList.appendChild(seminarEl);
+          //seminarsList += `${seminar.time} ${seminar.courseCode} «${seminar.name}» - ${seminar.teacher}\n`;
         });
       });
     }
   });
 
-  output.innerHTML = seminarsList;
+  //infoOutput.innerHTML = seminarsList;
+  infoOutput.appendChild(list);
 }
